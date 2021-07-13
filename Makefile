@@ -3,7 +3,7 @@ PYTHON_BIN = .venv/bin/
 .PHONY: clean clean-build clean-pyc lint tests test-all build
 
 .venv/bin/activate:
-	$(PYTHON) -m virtualenv .venv
+	$(PYTHON) -m venv .venv
 
 venv: .venv/bin/activate
 	$(PYTHON_BIN)pip install -e '.[dev]'
