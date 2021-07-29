@@ -31,7 +31,7 @@ jobs:
         make lint
     - name: Test
       run: |
-        make test-all
+        make tox-with-system-python
     - name: Build
       run: |
         make build

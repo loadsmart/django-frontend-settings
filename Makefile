@@ -30,6 +30,9 @@ test:
 test-all:
 	$(PYTHON_BIN)tox
 
+tox-with-system-python:
+	$(PYTHON_BIN)tox -e py
+
 build:
 	$(PYTHON_BIN)python setup.py build
 	$(PYTHON_BIN)python setup.py install
