@@ -41,6 +41,7 @@ setup(
     install_requires=[
         'django',
         'djangorestframework',
+        'django-picklefield',
         'django-constance>=2,<3',
         'django-waffle>=2,<3',
     ],
