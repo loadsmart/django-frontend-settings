@@ -36,3 +36,7 @@ tox-with-system-python:
 build:
 	$(PYTHON_BIN)python setup.py build
 	$(PYTHON_BIN)python setup.py install
+
+dist:
+	$(PYTHON_BIN)python setup.py build
+	$(PYTHON_BIN)python setup.py sdist

@@ -27,7 +27,7 @@ jobs:
       run: |
         make venv
     - name: Build package
-      run: make build
+      run: make dist
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
