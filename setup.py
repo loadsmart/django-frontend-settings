@@ -34,7 +34,7 @@ setup(
     setup_requires=["setuptools_scm"],
     url='https://github.com/loadsmart/django-frontend-settings',
     license='MIT',
-    description='Dynamic settings & feature flags for the fronted.',
+    description='Expose feature flags and settings from django waffle and django constance in an endpoint.',
     long_description=open('README.rst', 'r', encoding='utf-8').read(),
     author='Loadsmart',
     author_email='developer@loadsmart.com',
