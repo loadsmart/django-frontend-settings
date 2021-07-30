@@ -45,7 +45,7 @@ setup(
         'django-constance>=2,<3',
         'django-waffle>=2,<3',
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.6',
     extras_require=extras_require,
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
