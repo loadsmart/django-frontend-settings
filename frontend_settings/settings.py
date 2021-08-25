@@ -4,7 +4,7 @@ from rest_framework.settings import APISettings as _APISettings
 
 DEFAULTS = {
     "WAFFLE_FLAG_PREFIX": "FRONTEND_",
-    "CONSTANCE_KEY": "FRONTEND_SETTINGS",
+    "CONSTANCE_KEY_PREFIX": "FRONTEND_",
 }
 
 USER_SETTINGS = getattr(dj_settings, "FRONTEND_SETTINGS", None)
@@ -14,7 +14,7 @@ REMOVED_SETTINGS = []
 
 class APISettings(_APISettings):
     WAFFLE_FLAG_PREFIX: str
-    CONSTANCE_KEY: str
+    CONSTANCE_KEY_PREFIX: str
 
     @property
     def user_settings(self):
