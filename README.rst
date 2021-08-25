@@ -59,5 +59,5 @@ The default prefix for flags is `FRONTEND_`, if you like to change it you can do
 
     FRONTEND_SETTINGS = {
         "WAFFLE_FLAG_PREFIX": "FRONTEND_", # Prefix used to filter out the flag that should be exposed in the endpoint
-        "CONSTANCE_KEY": "FRONTEND_SETTINGS", # Name of the settings in constance
+        "CONSTANCE_KEY_PREFIX": "FRONTEND_", # Prefix used to filter out the settings in constance
     }

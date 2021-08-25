@@ -80,7 +80,7 @@ def test_return_settings(client):
     response = client.get(url)
     data = response.data["settings"]
 
-    assert data["SETTINGS_AAA"] == "VALUE AAA"
-    assert data["SETTINGS_BBB"] == "VALUE BBB"
-    assert data["SETTINGS_CCC"] == "VALUE CCC"
+    assert data["SETTING_AAA"] == "VALUE AAA"
+    assert data["SETTING_BBB"] == "VALUE BBB"
+    assert data["SETTING_CCC"] == "VALUE CCC"
     assert "NOT_FRONTEND" not in data

@@ -18,8 +18,9 @@ def get_flags(request: HttpRequest) -> Dict[str, bool]:
 
 
 def get_settings() -> Dict[str, Any]:
-    constance_key: str = settings.CONSTANCE_KEY
+    constance_key_prefix: str = settings.CONSTANCE_KEY_PREFIX
     return {
-        key: getattr(constance_config, key, None)
-        for key in getattr(constance_config, constance_key, [])
+        key.replace(constance_key_prefix, ""): getattr(constance_config, key, None)
+        for key in dir(constance_config)
+        if key.startswith(constance_key_prefix)
     }
