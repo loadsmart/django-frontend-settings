@@ -31,7 +31,7 @@ Add 'frontend-settings' to your INSTALLED_APPS setting.
 
     INSTALLED_APPS = [
         ...
-        'frontend-settings',
+        'frontend_settings',
     ]
 
 Expose the view in your urls:
