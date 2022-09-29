@@ -2,12 +2,12 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: django-frontend-settings
-  description: django-frontend-settings project repository
+  description: This project provides an API that expose settings and feature flags for the frontend.
   annotations:
     github.com/project-slug: loadsmart/django-frontend-settings
   tags:
     - python
 spec:
-  type: other
+  type: library
   lifecycle: production
-  owner: <CODE-OWNER>
+  owner: developer-productivity
