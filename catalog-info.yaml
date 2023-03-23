@@ -5,6 +5,7 @@ metadata:
   description: This project provides an API that expose settings and feature flags for the frontend.
   annotations:
     github.com/project-slug: loadsmart/django-frontend-settings
+    opslevel.com/tier: tier_4
   tags:
     - python
 spec:
