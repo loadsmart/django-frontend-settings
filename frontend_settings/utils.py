@@ -4,6 +4,7 @@ import waffle
 from constance import config as constance_config
 from django.http import HttpRequest
 
+from frontend_settings.models import FeatureToggle
 from frontend_settings.settings import settings
 
 
@@ -11,8 +12,19 @@ def get_flags(request: HttpRequest) -> Dict[str, bool]:
     prefix = settings.WAFFLE_FLAG_PREFIX
     model = waffle.get_waffle_flag_model()
     flags = model.objects.filter(name__startswith=prefix).values_list("name")
+
     return {
         name[0].replace(prefix, "", 1): waffle.flag_is_active(request, name[0])
+        for name in flags
+    }
+
+
+def get_toggle_flags(request) -> Dict[str, bool]:
+    prefix = settings.WAFFLE_FLAG_PREFIX
+    flags = FeatureToggle.objects.i.values_list("name")
+
+    return {
+        name[0].replace(prefix, "", 1): waffle.flag_is_active(None, name[0])
         for name in flags
     }
 
