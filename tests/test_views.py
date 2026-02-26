@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from django.contrib.auth.models import Group
 from django.db import connection
@@ -111,6 +113,6 @@ def test_avoids_n_plus_one_on_user_groups(client):
     user_group_queries = [
         query
         for query in captured.captured_queries
-        if '"auth_user_groups"' in query["sql"]
+        if re.search(r"\bauth_user_groups\b", query["sql"], re.IGNORECASE)
     ]
     assert len(user_group_queries) <= 2
