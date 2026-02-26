@@ -14,8 +14,9 @@ Usage
 -----
 
 Requirements
-Python (3.6, 3.7, 3.8, 3.9)
-Django (2.2, 3.0, 3.1, 3.2)
+Python (3.10, 3.11, 3.12)
+Django (4.1, 4.2)
+Django REST Framework (3.13+)
 
 Installation
 ~~~~~~~~~~~~
@@ -38,9 +39,10 @@ Expose the view in your urls:
 
 .. code:: python
 
+    from django.urls import path
     from frontend_settings.views import settings as frontend_settings_view
 
-    url(r"^frontend-settings/", frontend_settings_view, name="frontend-settings"),
+    path("frontend-settings/", frontend_settings_view, name="frontend-settings"),
 
 
 Then your flags from waffle and setting from constance should be returned on a get in this route:
