@@ -49,11 +49,18 @@ def get_flags(request: HttpRequest) -> Dict[str, bool]:
     user = getattr(request, "user", None)
     if user and user.is_authenticated:
         group_ids = tuple(user.groups.all().values_list("pk", flat=True))
-        request_with_cached_groups = _CachedRequest(request, _CachedUser(user, group_ids))
+        request_with_cached_groups = _CachedRequest(
+            request, _CachedUser(user, group_ids)
+        )
 
     model = waffle.get_waffle_flag_model()
     flags = model.objects.filter(name__startswith=prefix).values_list("name", flat=True)
-    return {name.replace(prefix, "", 1): waffle.flag_is_active(request_with_cached_groups, name) for name in flags}
+    return {
+        name.replace(prefix, "", 1): waffle.flag_is_active(
+            request_with_cached_groups, name
+        )
+        for name in flags
+    }
 
 
 def get_settings() -> Dict[str, Any]:
