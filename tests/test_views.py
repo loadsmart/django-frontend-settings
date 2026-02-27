@@ -1,4 +1,9 @@
+import re
+
 import pytest
+from django.contrib.auth.models import Group
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from rest_framework import status
 
@@ -84,3 +89,30 @@ def test_return_settings(client):
     assert data["SETTING_BBB"] == "VALUE BBB"
     assert data["SETTING_CCC"] == "VALUE CCC"
     assert "NOT_FRONTEND" not in data
+
+
+@pytest.mark.django_db
+def test_avoids_n_plus_one_on_user_groups(client):
+    prefix = settings.WAFFLE_FLAG_PREFIX
+    user = UserFactory.create()
+    group = Group.objects.create(name="frontend-settings-group")
+    user.groups.add(group)
+
+    for index in range(5):
+        flag = FlagFactory.create(name=f"{prefix}GROUP_FLAG_{index}")
+        flag.groups.add(group)
+
+    client.force_login(user)
+
+    with CaptureQueriesContext(connection) as captured:
+        response = client.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert all(response.data["flags"].values())
+
+    user_group_queries = [
+        query
+        for query in captured.captured_queries
+        if re.search(r"\bauth_user_groups\b", query["sql"], re.IGNORECASE)
+    ]
+    assert len(user_group_queries) <= 2

@@ -27,8 +27,6 @@ settings = APISettings(USER_SETTINGS, DEFAULTS, IMPORT_STRINGS)
 
 
 def reload_api_settings(*_, **kwargs):
-    global settings
-
     setting = kwargs["setting"]
 
     if setting == "FRONTEND_SETTINGS":

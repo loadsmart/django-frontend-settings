@@ -1,7 +1,7 @@
-from pkg_resources import DistributionNotFound, get_distribution
+from importlib.metadata import PackageNotFoundError, version
 
 try:
-    __version__ = get_distribution("django_frontend_settings").version
-except DistributionNotFound:
+    __version__ = version("django_frontend_settings")
+except PackageNotFoundError:
     # package is not installed
     __version__ = None
