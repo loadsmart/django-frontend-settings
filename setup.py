@@ -6,7 +6,7 @@ from setuptools import (
 
 extras_require = {
     'test': [
-        'django-constance[database]',
+        'django-constance',
         'factory_boy',
         'pytest',
         'pytest-cov',
@@ -39,11 +39,11 @@ setup(
     author='Loadsmart',
     author_email='developer@loadsmart.com',
     install_requires=[
-        'django>=4.1,<5',
-        'djangorestframework>=3.13,<4',
+        'django>=4.2,<7',
+        'djangorestframework>=3.15,<4',
         'django-picklefield',
-        'django-constance>=2,<3',
-        'django-waffle>=2,<3',
+        'django-constance>=3,<6',
+        'django-waffle>=3,<6',
     ],
     python_requires='>=3.10',
     extras_require=extras_require,
@@ -53,8 +53,11 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
-        "Framework :: Django :: 4.1",
         "Framework :: Django :: 4.2",
+        "Framework :: Django :: 5.0",
+        "Framework :: Django :: 5.1",
+        "Framework :: Django :: 5.2",
+        "Framework :: Django :: 6.0",
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -63,5 +66,6 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ]
 )
