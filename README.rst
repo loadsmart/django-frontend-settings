@@ -14,8 +14,8 @@ Usage
 -----
 
 Requirements
-Python (3.10+; Django 6.x requires Python 3.12+)
-Django (4.2, 5.2 LTS, 6.x)
+Python (3.10–3.12; Django 6.x requires Python 3.12+)
+Django (4.2, 5.2 LTS, 6.0)
 Django REST Framework (3.15+)
 
 Installation
