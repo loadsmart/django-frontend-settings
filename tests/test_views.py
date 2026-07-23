@@ -1,6 +1,7 @@
 import re
 
 import pytest
+import waffle
 from django.contrib.auth.models import Group
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
@@ -116,3 +117,76 @@ def test_avoids_n_plus_one_on_user_groups(client):
         if re.search(r"\bauth_user_groups\b", query["sql"], re.IGNORECASE)
     ]
     assert len(user_group_queries) <= 2
+
+
+def _select_queries_matching(captured, pattern: str):
+    return [
+        query
+        for query in captured.captured_queries
+        if re.search(pattern, query["sql"], re.IGNORECASE)
+        and re.search(r"^\s*SELECT\b", query["sql"], re.IGNORECASE)
+    ]
+
+
+@pytest.mark.django_db
+def test_avoids_n_plus_one_on_flag_evaluation(client):
+    """
+    Batch-load FRONTEND_* flags once (plus M2M prefetch) instead of one
+    Flag.get() / Redis round-trip per flag via waffle.flag_is_active.
+    """
+    prefix = settings.WAFFLE_FLAG_PREFIX
+    user = UserFactory.create()
+    group = Group.objects.create(name="frontend-settings-batch-group")
+    user.groups.add(group)
+
+    flag_count = 12
+    for index in range(flag_count):
+        flag = FlagFactory.create(name=f"{prefix}BATCH_FLAG_{index}")
+        flag.groups.add(group)
+
+    client.force_login(user)
+
+    with CaptureQueriesContext(connection) as captured:
+        response = client.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data["flags"]) >= flag_count
+    assert all(
+        response.data["flags"][f"BATCH_FLAG_{index}"] for index in range(flag_count)
+    )
+
+    # Primary flag table: a single filtered SELECT (not one get-by-name per flag).
+    primary_flag_selects = _select_queries_matching(
+        captured, r'FROM\s+"?waffle_flag"?\s'
+    )
+    assert len(primary_flag_selects) == 1
+
+    # M2M membership loaded in bulk via prefetch_related, not per flag.
+    flag_users_selects = _select_queries_matching(captured, r"\bwaffle_flag_users\b")
+    flag_groups_selects = _select_queries_matching(captured, r"\bwaffle_flag_groups\b")
+    assert len(flag_users_selects) <= 1
+    assert len(flag_groups_selects) <= 1
+
+
+@pytest.mark.django_db
+def test_flag_query_count_does_not_grow_with_flag_count(client):
+    prefix = settings.WAFFLE_FLAG_PREFIX
+    user = UserFactory.create()
+    client.force_login(user)
+
+    def measure(count: int) -> int:
+        FlagModel = waffle.get_waffle_flag_model()
+        FlagModel.objects.filter(name__startswith=f"{prefix}SCALE_").delete()
+        for index in range(count):
+            FlagFactory.create(name=f"{prefix}SCALE_{index}", everyone=True)
+
+        with CaptureQueriesContext(connection) as captured:
+            response = client.get(url)
+
+        assert response.status_code == status.HTTP_200_OK
+        return len(captured.captured_queries)
+
+    few = measure(3)
+    many = measure(15)
+    # Bounded evaluation: adding flags must not add a linear number of queries.
+    assert many - few <= 2
