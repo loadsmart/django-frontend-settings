@@ -120,12 +120,14 @@ def test_avoids_n_plus_one_on_user_groups(client):
 
 
 def _select_queries_matching(captured, pattern: str):
-    return [
-        query
-        for query in captured.captured_queries
-        if re.search(pattern, query["sql"], re.IGNORECASE)
-        and re.search(r"^\s*SELECT\b", query["sql"], re.IGNORECASE)
-    ]
+    matching = []
+    for query in captured.captured_queries:
+        sql = query["sql"]
+        if not re.search(r"^\s*SELECT\b", sql, re.IGNORECASE):
+            continue
+        if re.search(pattern, sql, re.IGNORECASE):
+            matching.append(query)
+    return matching
 
 
 @pytest.mark.django_db
