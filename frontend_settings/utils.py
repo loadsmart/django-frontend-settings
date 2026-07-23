@@ -73,7 +73,9 @@ def _bind_prefetched_membership(flag) -> None:
     flag._get_group_ids = lambda ids=group_ids: ids
 
 
-def _evaluate_flags(flags: Iterable, request: HttpRequest, prefix: str) -> Dict[str, bool]:
+def _evaluate_flags(
+    flags: Iterable, request: HttpRequest, prefix: str
+) -> Dict[str, bool]:
     result: Dict[str, bool] = {}
     for flag in flags:
         _bind_prefetched_membership(flag)
